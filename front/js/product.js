@@ -1,10 +1,11 @@
-const item = window.location.search.split("?id=").join("");    //récupère l'id seulement
-console.log(item);
+const params = new URLSearchParams(document.location.search);
+const itemId = params.get('id');
+console.log(itemId);
 
 let itemData = [];      //stock les élément du produit
 
 const requestItem = async () => {
-    await fetch(`http://localhost:3000/api/products/${item}`)
+    await fetch(`http://localhost:3000/api/products/${itemId}`)
         .then((resolve) =>
             resolve.json())
         .then((data) => {
@@ -26,6 +27,9 @@ const displayItem = async () => {
 
     document.querySelector('.item__content__titlePrice #title').innerHTML = `
     ${itemData.name}`;
+
+    document.querySelector('.item__content__titlePrice #price').innerHTML = `
+    ${itemData.price}`;
 
     document.querySelector('.item__content__description #description').innerHTML = `
     ${itemData.description}`;
