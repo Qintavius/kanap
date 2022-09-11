@@ -1,85 +1,127 @@
-const params = new URLSearchParams(document.location.search);   //récupération de l'id dans l'url
-const itemId = params.get('id');
-    //console.log(itemId);
+//----------------------------------------------------
+//ID du produit isolé de l'url
+//----------------------------------------------------
+const parametresUrl = new URLSearchParams(window.location.search);
+const id = parametresUrl.get("id");
+    // console.log(id);
+//----------------------------------------------------
+//Définition des variables
+//----------------------------------------------------
+let image       = document.querySelector('.item__img');
+let title       = document.querySelector('#title');
+let price       = document.querySelector('#price');
+let description = document.querySelector('#description');
 
-let itemData = [];      //stock les élément du produit
+let colors      = document.querySelector('#colors');
+let seclectedColor;
 
-const requestItem = async () => {
-    await fetch(`http://localhost:3000/api/products/${itemId}`)     //indique qu'il faut récupérer l'id dans le tableau json
-        .then((resolve) =>
-            resolve.json())
-        .then((data) => {
-            itemData = data;
-                //console.log(itemData);
-        })
-        .catch((err) => {       //message d'erreur si pas de reponse de l'api
-            //console.log("Erreur: " + err);
-    });
-};
+let quantity    = document.querySelector('#quantity');
+let selectedQuantity;
 
-requestItem();
+// Bouton d'ajout au panier
+let addButton = document.querySelector('#addToCart');
 
-//Affichage du produit dans la page 
-const displayItem = async () => {
-    await requestItem();        //Continue le script si l'api communique
+//----------------------------------------------------
+//Récupération des données de l'api
+//----------------------------------------------------
 
-    //Injection du JS dans la page HTML
-    document.querySelector('.item__img').innerHTML = `
-    <img src="${itemData.imageUrl}" alt="Photographie d'un canapé">`;
+fetch(`http://localhost:3000/api/products/${id}`)
+.then(function(request) {
+    if(request.ok){
+        return request.json()
+    }
+})
+.then (function(data) {
+        // console.table(data);
+        productDisplay(data);
+        productSelected(data);
+});
 
-    document.querySelector('.item__content__titlePrice #title').innerHTML = `
-    ${itemData.name}`;
+//----------------------------------------------------
+//Affichage du produit
+//----------------------------------------------------
+let productDisplay = (data) => {
+    image.innerHTML = `<img src="${data.imageUrl}" alt="${data.altTxt}">`;
+    title.innerHTML = `${data.name}`;
+    price.innerHTML = `${data.price}`;
+    description.innerHTML = `${data.description}`;
+        for(let color of data.colors) {
+            colors.innerHTML += `<option value="${color}">${color}</option>`;
+    }
+}
 
-    document.querySelector('.item__content__titlePrice #price').innerHTML = `
-    ${itemData.price}`;
+//----------------------------------------------------
+//Choix quantité produit
+//----------------------------------------------------
+quantity.addEventListener('input', (sq) => {
+    selectedQuantity = sq.target.value;
+    quantity = selectedQuantity;
+    // console.log(selectedQuantity);
+});
 
-    document.querySelector('.item__content__description #description').innerHTML = `
-    ${itemData.description}`;
+//----------------------------------------------------
+//Choix couleur produit
+//----------------------------------------------------
+colors.addEventListener('input', (sc) => {
+     seclectedColor = sc.target.value;
+     color = seclectedColor;
+    //  console.log(seclectedColor);
+});
 
-    //Variable de l'option de couleur
-    let selColor = document.querySelector('.item__content__settings #colors');
-        //console.log(selColor);
+//----------------------------------------------------
+//Condition ajout produit
+//----------------------------------------------------
+let productSelected = (data) => {
+    addButton.addEventListener('click', (eB) => {
+        eB.preventDefault();
 
-        //console.log(itemData.colors);
-
-    //Ajout des options de couleurs référencées dans le tableau
-    itemData.colors.forEach((color) => {
-            //console.log(document.createElement("option"));
-        let optionColor = document.createElement("option");
-
-        optionColor.innerHTML = `${color}`;
-        optionColor.value = `${color}`;
-
-        selColor.appendChild(optionColor);
-    })
-    addCart(itemData);  //Fonction du bouton ajour au panier lié au produit
-};
-
-displayItem();
-
-
-//création de la fonction ajouter au panier
-const addCart = () => {     
-    let addButton = document.getElementById('addToCart');
-        //console.log(addButton);
-    addButton.addEventListener('click', () => {     //écoute sur le bouton ajouter au panier
-        let productTab = JSON.parse(localStorage.getItem("article"))    //Récupération du tableau products dans le local storage
-        let select = document.getElementById('colors');       // variable pour permettre la sélection de couleur
-            console.log(select.value);
-            console.log(productTab);
-
-        const productColor = Object.assign({}, itemData, {      // Sélection de la couleur du produit dans le local storage
-            color: `${select.value}`,
-            quantity: 1,
-        });
-        console.log(productColor);
-
-        if(productTab == null) {    // Si le local storage est vide
-            productTab = []
-            productTab.push(itemData);      // on ajoute le produit sélectionné au local storage
-                console.log(productTab)
-
-            localStorage.setItem("article", JSON.stringify(productTab));    //le tableau est retourné sous forme string
+        if(seclectedColor == '' || seclectedColor == undefined) {
+            alert('Veuillez choisir une couleur');
         }
-    })
-};
+        else if(selectedQuantity == 0 ||selectedQuantity == undefined) {
+            alert('Choisissez une quantitée');
+        } else {
+            alert('L\'article a bien été ajouté');
+        }
+
+        // Variable de stockage de l'article selectionné
+        let selectedItem = {
+            id: data._id,
+            name: data.name,
+            price: data.price,
+            color: seclectedColor,
+            quantity: parseInt(selectedQuantity)
+        }
+        console.log(selectedItem);
+
+
+        //----------------------------------------------------
+        //LocalStorage
+        //----------------------------------------------------
+
+        // Interrogation du LS
+        let storageProduct = JSON.parse(localStorage.getItem('cart'));
+
+        // Si produit identique dans le LS => incrémantation
+        if(storageProduct) {
+            let item = storageProduct.find(
+                (item) => 
+                    item.id == selectedItem.id && item.color == selectedItem.color
+            );
+
+            if(item) {
+                item.quantity = item.quantity +selectedItem.quantity;
+                localStorage.setItem('cart', JSON.stringify(storageProduct));
+                return;
+            }
+
+            storageProduct.push(selectedItem);
+            localStorage.setItem('cart', JSON.stringify(storageProduct));
+        // sinon création d'un nouvel objet contenant le nouveau produit ajouté
+        } else {
+            let newAddProduct = [];
+            newAddProduct.push(selectedItem);
+            localStorage.setItem('cart', JSON.stringify(newAddProduct));
+        }
+    });
+}
