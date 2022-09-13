@@ -31,30 +31,26 @@ for(item of cart) {
   // console.log(items);
 }
 
-
-
 //-------------------------------------------------
 // Fonction total quantitée
 //-------------------------------------------------
-let totalQuantity = function() {
-  foundQuantity = cart.map((item) => item.quantity)
+let itemQuantity = function() {
+  let foundQuantity = cart.map((i) => i.quantity);
   const reducer = (accumulator, curr) => accumulator + curr;
 // console.log(foundQuantity);
-  let totalQuantity = foundQuantity.reduce(reducer);
+  let sumQuantity = foundQuantity.reduce(reducer);
   // for(i =0; i< items.length; i++){
   //   totalQuantity = Number(foundQuantity[i]) + Number(totalQuantity);
   // }
-  document.querySelector("#totalQuantity").innerHTML = `${totalQuantity}`;
-
-  console.log(foundQuantity.reduce(reducer));
+  // console.log(foundQuantity.reduce(reducer));
+  return sumQuantity;
 }
-totalQuantity();
 
 //-------------------------------------------------
 // Fonction total prix
 //-------------------------------------------------
-let totalPrice = function() {
-  foundPrice = cart.map((item) => item.price)
+let itemPrice = function() {
+  let foundPrice = cart.map((i) => i.totalPrice);
   const reducer = (accumulator, curr) => accumulator + curr;
 // console.log(foundPrice);
   let sum = foundPrice.reduce(reducer);
@@ -62,9 +58,52 @@ let totalPrice = function() {
   //   sum += Number(foundPrice[i]) * Number(foundQuantity[i]);
   // }
   // console.log(sum);
-  document.querySelector("#totalPrice").innerHTML = `${sum}`;
-
-  console.log(foundPrice.reduce(reducer));
+  // console.log(foundPrice.reduce(reducer));
+  return sum;
 }
-totalPrice();
+console.log(itemPrice());
+
+//-------------------------------------------------
+// sauvegarde du nouveau panier
+//-------------------------------------------------
+let updateCart = () => {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+// console.log(cart);
+
+//-------------------------------------------------
+// Fonction somme prix + quantité
+//-------------------------------------------------
+function total() {
+  let priceSum = itemPrice();
+  document.getElementById("totalPrice").innerHTML = priceSum;
+
+  localStorage.setItem('priceSum', JSON.stringify(priceSum));
+
+  let quantitySum = itemQuantity();
+  document.getElementById("totalQuantity").innerHTML = quantitySum;
+
+  updateCart();
+}
+total();
+
+let selectedQuantity = Array.from(document.querySelector('.itemQuantity'));
+let totalPriceCart = Array.from(document.querySelector('#totalPrice'));
+let totalQuantity = Array.from(document.querySelector('.cart__item__content__settings__quantity p'));
+
+selectedQuantity.forEach(function (quantity, i) {
+  quantity.addEvenlister("input", (e) => {
+    e.preventDefault();
+    let addItemPrice = quantity.value * cart[i].price;
+    console.log(quantity.value);
+
+    totalQuantity[i].innerHTML = "Qté: " + quantity.value;
+    cart[i].quantity = parseInt(quantity.value);
+
+    totalPriceCart[i].innerHTML = addItemPrice;
+    cart[i].totalPriceCart = addItemPrice;
+
+    total();
+  });
+});
 
