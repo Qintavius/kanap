@@ -68,6 +68,19 @@ colors.addEventListener('input', (sc) => {
     //  console.log(seclectedColor);
 });
 
+// Variable de stockage de l'article selectionné
+// class Product{
+//     constructor(){
+//         this.id = id;
+//         this.price = price.innerHTML;
+//         this.color = seclectedColor;
+//         this.quantity = selectedQuantity;
+//         this.totalPrice = price.innerHTML * selectedQuantity;
+//     }
+// }
+
+// Tableau de stockage des produits
+let newAddProduct = [];
 //----------------------------------------------------
 //Condition ajout produit
 //----------------------------------------------------
@@ -84,16 +97,19 @@ let productSelected = (data) => {
             alert('L\'article a bien été ajouté');
         }
 
-        // Variable de stockage de l'article selectionné
+        //Variable de stockage de l'article selectionné
         let selectedItem = {
             id: data._id,
             name: data.name,
             price: data.price,
             color: seclectedColor,
-            quantity: parseInt(selectedQuantity)
+            quantity: parseInt(selectedQuantity),
+            totalPrice: data.price * parseInt(selectedQuantity),
+            image: data.imageUrl,
+            imageTxt: data.altTxt
         }
-        console.log(selectedItem);
-
+        // let selectedItem = new Product()
+        // console.log(selectedItem);
 
         //----------------------------------------------------
         //LocalStorage
@@ -104,22 +120,20 @@ let productSelected = (data) => {
 
         // Si produit identique dans le LS => incrémantation
         if(storageProduct) {
-            let item = storageProduct.find(
-                (item) => 
-                    item.id == selectedItem.id && item.color == selectedItem.color
+            let item = storageProduct.find((item) => 
+                item.id == selectedItem.id && item.color == selectedItem.color
             );
 
             if(item) {
-                item.quantity = item.quantity +selectedItem.quantity;
+                item.quantity = item.quantity + selectedItem.quantity;
                 localStorage.setItem('cart', JSON.stringify(storageProduct));
                 return;
             }
 
-            storageProduct.push(selectedItem);
-            localStorage.setItem('cart', JSON.stringify(storageProduct));
+        storageProduct.push(selectedItem);
+        localStorage.setItem('cart', JSON.stringify(storageProduct));
         // sinon création d'un nouvel objet contenant le nouveau produit ajouté
         } else {
-            let newAddProduct = [];
             newAddProduct.push(selectedItem);
             localStorage.setItem('cart', JSON.stringify(newAddProduct));
         }
