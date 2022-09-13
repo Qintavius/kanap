@@ -79,8 +79,6 @@ colors.addEventListener('input', (sc) => {
 //     }
 // }
 
-// Tableau de stockage des produits
-let newAddProduct = [];
 //----------------------------------------------------
 //Condition ajout produit
 //----------------------------------------------------
@@ -126,6 +124,7 @@ let productSelected = (data) => {
 
             if(item) {
                 item.quantity = item.quantity + selectedItem.quantity;
+                item.totalPrice += item.price * selectedItem.quantity;
                 localStorage.setItem('cart', JSON.stringify(storageProduct));
                 return;
             }
@@ -134,6 +133,8 @@ let productSelected = (data) => {
         localStorage.setItem('cart', JSON.stringify(storageProduct));
         // sinon création d'un nouvel objet contenant le nouveau produit ajouté
         } else {
+            // Tableau de stockage des produits
+            let newAddProduct = [];
             newAddProduct.push(selectedItem);
             localStorage.setItem('cart', JSON.stringify(newAddProduct));
         }
