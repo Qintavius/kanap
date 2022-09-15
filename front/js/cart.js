@@ -2,11 +2,13 @@ let cart = JSON.parse(localStorage.getItem('cart'));
 // console.log(cart);
 
 let items = [];
+
 //-------------------------------------------------
 // Fonction affichage produit
 //-------------------------------------------------
 function displayItem() {
   for(item of cart) {
+
     document.querySelector('#cart__items').innerHTML += `
         <article class="cart__item" data-id="${item.id}" data-color="${item.color}">
             <div class="cart__item__img">
@@ -29,7 +31,9 @@ function displayItem() {
               </div>
             </div>
         </article>`;
-  
+
+        
+        
     items.push(item.id);
     // console.log(items);
   }
@@ -44,7 +48,7 @@ displayTotalQuantity = (item) => {
   const total = cart.reduce((total, item) => total + item.quantity, 0)
   totalQuantity.textContent = total;
 }
-displayTotalQuantity();
+displayTotalQuantity(item);
 
 //-------------------------------------------------
 // Fonction total prix
@@ -63,10 +67,23 @@ function updateCart() {
 }
 // console.log(cart);
 
-let itemNumber = document.querySelector('input.itemQuantity');
-console.log(itemNumber);
+//-------------------------------------------------
+// modif quantite produit
+//-------------------------------------------------
+// recuperer la valeur de quantité dans LS
+// écouter le input de quantité 
+// modifier la valeur du input
+// sauvegarder la valeur au LS  
+// afficher les élément à jour
 
-itemNumber.addEventListener('input', (q) => { 
-  // console.log(itemNumber);
-  
-});
+let inputQuantity = Array.from(document.querySelectorAll('.itemQuantity'));
+let currentQuantity = Array.from(document.querySelectorAll('.cart__item__content__settings__quantity p'));
+
+
+inputQuantity.forEach(function (quantity, i) {
+  quantity.addEventListener('input', () => {
+
+    currentQuantity[i].innerHTML = "Qté : " + quantity.value;
+    cart[i].quantity = Number(quantity.value);
+  })
+})
