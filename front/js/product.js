@@ -122,15 +122,16 @@ let productSelected = (data) => {
                 item.id == selectedItem.id && item.color == selectedItem.color
             );
 
-            if(item) {
+            while(item) {
                 item.quantity = item.quantity + selectedItem.quantity;
                 item.totalPrice += item.price * selectedItem.quantity;
                 localStorage.setItem('cart', JSON.stringify(storageProduct));
                 return;
             }
 
-        storageProduct.push(selectedItem);
-        localStorage.setItem('cart', JSON.stringify(storageProduct));
+            storageProduct.push(selectedItem);
+            localStorage.setItem('cart', JSON.stringify(storageProduct));
+
         // sinon création d'un nouvel objet contenant le nouveau produit ajouté
         } else {
             // Tableau de stockage des produits
