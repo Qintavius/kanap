@@ -32,13 +32,27 @@ function displayItem() {
             </div>
         </article>`;
 
-        
-        
     items.push(item.id);
     // console.log(items);
   }
 }
 displayItem();
+
+//-------------------------------------------------
+// Lire le LS
+//-------------------------------------------------
+function getCart(){
+  let cart = localStorage.getItem('cart');
+  return JSON.parse(cart);
+}
+
+//-------------------------------------------------
+// sauvegarde du nouveau panier
+//-------------------------------------------------
+function updateCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+// console.log(cart);
 
 //-------------------------------------------------
 // Fonction total quantitée
@@ -59,23 +73,10 @@ displayTotalPrice = () => {
   totalPrice.textContent = total;
 }
 displayTotalPrice();
-//-------------------------------------------------
-// sauvegarde du nouveau panier
-//-------------------------------------------------
-function updateCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
-// console.log(cart);
 
 //-------------------------------------------------
 // modif quantite produit
 //-------------------------------------------------
-// recuperer la valeur de quantité dans LS
-// écouter le input de quantité 
-// modifier la valeur du input
-// sauvegarder la valeur au LS  
-// afficher les élément à jour
-
 let inputQuantity = Array.from(document.querySelectorAll('.itemQuantity'));
 let currentQuantity = Array.from(document.querySelectorAll('.cart__item__content__settings__quantity p'));
 
@@ -85,5 +86,37 @@ inputQuantity.forEach(function (quantity, i) {
 
     currentQuantity[i].innerHTML = "Qté : " + quantity.value;
     cart[i].quantity = Number(quantity.value);
+    displayTotalQuantity()
+    displayTotalPrice()
+    updateCart();
   })
 })
+
+//-------------------------------------------------
+// Supprimer produit
+//-------------------------------------------------
+let deleteButton = document.querySelectorAll('.deleteItem');
+
+for(let i = 0; i < deleteButton.length; i++) {
+  deleteButton[i].addEventListener('click', (event) => {
+    event.preventDefault();
+    console.log(deleteButton);
+
+  let productInStorage = cart[i].id;
+  console.log('resultat ' + productInStorage);
+
+  cart = cart.filter( el => el.id !== productInStorage)
+  console.log(cart);
+
+  displayTotalQuantity();
+  displayTotalPrice();
+  updateCart();
+  alert('Le produit ' + `${item.name}` + ',' + ' couleur ' + `${item.color}` + ' à été supprimé');
+  // Actualisation de la page pour afficher le panier sauvegardé
+  window.location.reload()
+  })
+}
+
+//-------------------------------------------------
+// Formulaire
+//-------------------------------------------------
