@@ -68,17 +68,6 @@ colors.addEventListener('input', (sc) => {
     //  console.log(seclectedColor);
 });
 
-// Variable de stockage de l'article selectionné
-// class Product{
-//     constructor(){
-//         this.id = id;
-//         this.price = price.innerHTML;
-//         this.color = seclectedColor;
-//         this.quantity = selectedQuantity;
-//         this.totalPrice = price.innerHTML * selectedQuantity;
-//     }
-// }
-
 //----------------------------------------------------
 //Condition ajout produit
 //----------------------------------------------------
