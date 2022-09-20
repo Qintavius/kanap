@@ -49,7 +49,7 @@ function getCart(){
 //-------------------------------------------------
 // sauvegarde du nouveau panier
 //-------------------------------------------------
-function updateCart() {
+function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 // console.log(cart);
@@ -88,7 +88,7 @@ inputQuantity.forEach(function (quantity, i) {
     cart[i].quantity = Number(quantity.value);
     displayTotalQuantity()
     displayTotalPrice()
-    updateCart();
+    saveCart();
   })
 })
 
@@ -102,15 +102,15 @@ for(let i = 0; i < deleteButton.length; i++) {
     event.preventDefault();
     console.log(deleteButton);
 
-  let productInStorage = cart[i].id;
+  let productInStorage = cart[i].id && cart[i].color;
   console.log('resultat ' + productInStorage);
 
-  cart = cart.filter( el => el.id !== productInStorage)
+  cart = cart.filter( el => el.id !== productInStorage && el.color !== productInStorage)
   console.log(cart);
 
   displayTotalQuantity();
   displayTotalPrice();
-  updateCart();
+  saveCart();
   alert('Le produit ' + `${item.name}` + ',' + ' couleur ' + `${item.color}` + ' à été supprimé');
   // Actualisation de la page pour afficher le panier sauvegardé
   window.location.reload()
