@@ -4,6 +4,7 @@
 const parametresUrl = new URLSearchParams(window.location.search);
 const id = parametresUrl.get("id");
     // console.log(id);
+
 //----------------------------------------------------
 //Définition des variables
 //----------------------------------------------------
@@ -24,7 +25,6 @@ let addButton = document.querySelector('#addToCart');
 //----------------------------------------------------
 //Récupération des données de l'api
 //----------------------------------------------------
-
 fetch(`http://localhost:3000/api/products/${id}`)
 .then(function(request) {
     if(request.ok){
@@ -77,10 +77,13 @@ let productSelected = (data) => {
 
         if(seclectedColor == '' || seclectedColor == undefined) {
             alert('Veuillez choisir une couleur');
+            return [];
         }
         else if(selectedQuantity == 0 ||selectedQuantity == undefined) {
             alert('Choisissez une quantitée');
-        } else {
+            return [];
+        } 
+        else {
             alert('L\'article a bien été ajouté');
         }
 
@@ -95,7 +98,6 @@ let productSelected = (data) => {
             image: data.imageUrl,
             imageTxt: data.altTxt
         }
-        // let selectedItem = new Product()
         // console.log(selectedItem);
 
         //----------------------------------------------------
