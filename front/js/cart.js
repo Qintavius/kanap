@@ -116,7 +116,7 @@ for(let i = 0; i < deleteButton.length; i++) {
   displayTotalQuantity();
   displayTotalPrice();
   saveCart();
-  alert('Le produit ' + `${item.name}` + ',' + ' couleur ' + `${item.color}` + ' à été supprimé');
+  alert('Le produit à été supprimé');
   // Actualisation de la page pour afficher le panier sauvegardé
   window.location.reload()
   })
@@ -125,9 +125,9 @@ for(let i = 0; i < deleteButton.length; i++) {
 //-------------------------------------------------
 // Formulaire
 //-------------------------------------------------
-let submitForm = document.getElementById('order');
+let submitForm = document.getElementById('order'); // Bouton commander
 
-// ***************** Variables champs formulaire ******************
+// ***************** Variables champs formulaire *****************
 let firstName = document.getElementById('firstName');
 let errorFirstName = document.getElementById('firstNameErrorMsg');
 
@@ -149,19 +149,19 @@ let errorEmail = document.getElementById('emailErrorMsg');
 
 let valueFirstName, valueLastName, valueAdress, valueCity, valueEmail;
 
-// ***************** Regex conditions validation ******************
+// ***************** Regex conditions validation *****************
 let textOnlyValidation = /^[a-zA-ZéèîïÈÉÎÌ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÈÉÎÌ][a-zéèêàçîï]+)?/;
 let textNumValidation = /^[0-9]{1,3} [a-zA-ZéèîïÈÉÎÌ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÈÉÎÌ][a-zéèêàçîï]+)?/;
 let cpValidation = /^[0-9]{3,5} [a-zA-ZéèîïÈÉÎÌ][a-zéèêàçîï]+([-'\s][a-zA-ZéèîïÈÉÎÌ][a-zéèêàçîï]+)?/;
 let emailValidation = /^[\w-\.]+@([\w-\.]+\.)+[\w-]{2,4}$/;
 
-// ***************** Prenom ******************
+// ***************** Prenom *****************
 firstName.addEventListener('input', function(e) {
   valueFirstName;
   if (e.target.value.length == 0) {
     errorFirstName.innerHTML = '';
     valueFirstName = null;
-  } else if (e.target.value.length < 3 || e.target.value.length > 25) {
+  } else if (e.target.value.length < 2 || e.target.value.length > 25) {
     // console.log(errorFirstName);
     errorFirstName.innerHTML = "Le champ doit contenir entre 2 et 25 caractères";
     valueFirstName = null;
@@ -175,20 +175,20 @@ firstName.addEventListener('input', function(e) {
     // console.log(valueFirstName);
   }
 
-  if (!e.target.value.match(textOnlyValidation) && e.target.value.length > 3 && e.target.value.length < 25) {
-    errorFirstName.innerHTML = 'Le champ ne doit pas contenir de caractères spéciaux sauf (- \')';
+  if (!e.target.value.match(textOnlyValidation) && e.target.value.length > 2 && e.target.value.length < 25) {
+    errorFirstName.innerHTML = 'Les caractères spéciaux acceptés sont (- \')';
     valueFirstName = null;
     // console.log('erreur caractere speciaux');
   }
 });
 
-// ***************** Nom ******************
+// ***************** Nom *****************
 lastName.addEventListener('input', function(e) {
   valueLastName;
   if (e.target.value.length == 0) {
     errorLastName.innerHTML = '';
     valueLastName = null;
-  } else if (e.target.value.length < 3 || e.target.value.length > 25) {
+  } else if (e.target.value.length < 2 || e.target.value.length > 25) {
     // console.log(errorLastName);
     errorLastName.innerHTML = "Le champ doit contenir entre 2 et 25 caractères";
     valueLastName = null;
@@ -202,14 +202,14 @@ lastName.addEventListener('input', function(e) {
     // console.log(valueLastName);
   }
 
-  if (!e.target.value.match(textOnlyValidation) && e.target.value.length > 3 && e.target.value.length < 25) {
-    errorLastName.innerHTML = 'Le champ ne doit pas contenir de caractères spéciaux sauf (- \')';
+  if (!e.target.value.match(textOnlyValidation) && e.target.value.length > 2 && e.target.value.length < 25) {
+    errorLastName.innerHTML = 'Les caractères spéciaux acceptés sont (- \')';
     valueLastName = null;
     // console.log('erreur caractere speciaux');
   }
 });
 
-// ***************** Adresse ******************
+// ***************** Adresse *****************
 address.addEventListener('input', function(e) {
   valueAdress;
   if (e.target.value.length == 0) {
@@ -230,13 +230,13 @@ address.addEventListener('input', function(e) {
   }
 
   if (!e.target.value.match(textNumValidation) && e.target.value.length > 3 && e.target.value.length < 35) {
-    errorAddress.innerHTML = 'Renseignez d\'abord le numéro de la voie et peut contenir les caractères spéciaux (- \')';
+    errorAddress.innerHTML = 'Renseignez d\'abord le numéro de la voie, peut contenir les caractères spéciaux (- \')';
     valueAdress = null;
     // console.log('erreur caractere speciaux');
   }
 });
 
-// ***************** Ville ******************
+// ***************** Ville *****************
 city.addEventListener('input', function(e) {
   valueCity;
   if (e.target.value.length == 0) {
@@ -257,13 +257,13 @@ city.addEventListener('input', function(e) {
   }
 
   if (!e.target.value.match(cpValidation) && e.target.value.length > 3 && e.target.value.length < 35) {
-    errorCity.innerHTML = 'Renseignez d\'abord le code postal et peut contenir les caractères spéciaux (- \')';
+    errorCity.innerHTML = 'Renseignez d\'abord le code postal, peut contenir les caractères spéciaux (- \')';
     valueCity = null;
     // console.log('erreur caractere speciaux');
   }
 });
 
-// ***************** Email ******************
+// ***************** Email *****************
 email.addEventListener('input', function(e) {
   valueEmail;
   if (e.target.value.length == 0) {
@@ -282,7 +282,7 @@ email.addEventListener('input', function(e) {
   }
 });
 
-// ***************** Validation du formulaire ******************
+// ***************** Validation du formulaire *****************
 let formular = document.getElementById('order');
 
 formular.addEventListener('click', (e) => {
@@ -315,7 +315,7 @@ formular.addEventListener('click', (e) => {
     console.log(orderData);
 
 //-------------------------------------------------
-// Requete Fetch post
+// Requete Fetch POST
 //-------------------------------------------------
     fetch('http://localhost:3000/api/products/order', {
       method: 'POST',
@@ -346,7 +346,7 @@ formular.addEventListener('click', (e) => {
     });
 
   } else {
-    alert('Veuillez remplir le formulaire correctement');
+    alert('Veuillez renseigner le formulaire correctement');
   }
 });
 
