@@ -18,11 +18,11 @@ console when the server starts, e.g. `Listening on port 3001`.
 ## FR ##
 # Kanap #
 
-Il s'agit du serveur front-end et back-end pour le projet 5 du partcours Développeur Web.
+Il s'agit du serveur front-end et back-end pour le projet 5 du parcours Développeur Web.
 
 ### Prérequis back-end ###
 
-Vous aurez besoin d'avoir `Node` et `npm` installer localementsur votre machine.
+Vous aurez besoin d'avoir `Node` et `npm` installer localement sur votre machine.
 
 ### Installation back-end ###
 
