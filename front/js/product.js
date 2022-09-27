@@ -80,9 +80,13 @@ let productSelected = (data) => {
             return [];
         }
         else if(selectedQuantity == 0 ||selectedQuantity == undefined) {
-            alert('Choisissez une quantitée');
+            alert('Veuillez choisir une quantitée');
             return [];
-        } 
+        }
+        else if(selectedQuantity > 100 || selectedQuantity < 1) {
+            alert('La quantitée doit être comprise entre 1 et 100')
+            return [];
+        }
         else {
             alert('L\'article a bien été ajouté');
         }
