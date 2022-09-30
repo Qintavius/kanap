@@ -31,10 +31,10 @@ fetch(`http://localhost:3000/api/products/${id}`)
         return request.json()
     }
 })
-.then (function(data) {
-        // console.table(data);
-        productDisplay(data);
-        productSelected(data);
+.then(function(data) {
+    // console.table(data);
+    productDisplay(data);
+    productSelected(data);
 });
 
 //----------------------------------------------------
@@ -94,13 +94,8 @@ let productSelected = (data) => {
         //Variable de stockage de l'article selectionné
         let selectedItem = {
             id: data._id,
-            name: data.name,
-            price: data.price,
             color: seclectedColor,
             quantity: parseInt(selectedQuantity),
-            totalPrice: data.price * parseInt(selectedQuantity),
-            image: data.imageUrl,
-            imageTxt: data.altTxt
         }
         // console.log(selectedItem);
 
@@ -119,7 +114,6 @@ let productSelected = (data) => {
 
             while(item) {
                 item.quantity = item.quantity + selectedItem.quantity;
-                item.totalPrice += item.price * selectedItem.quantity;
                 localStorage.setItem('cart', JSON.stringify(storageProduct));
                 return;
             }
