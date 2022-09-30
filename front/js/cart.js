@@ -1,17 +1,35 @@
 let cart = JSON.parse(localStorage.getItem('cart'));
 // console.log(cart);
 
+// Stock les elements du LS dans un tableau
 let items = [];
+
+// Variable parent de l'élément article
+let injectArticle;
+
+//-------------------------------------------------
+// Fonction initialisation des fonctions pour affichage
+//-------------------------------------------------
+function displayCart() {
+  const cart = getCart();
+  displayItem(cart);
+  deleteItem(cart);
+  displayTotalQuantity();
+  checkCart();
+};
+
+displayCart();
 
 //-------------------------------------------------
 // Fonction affichage produit
 //-------------------------------------------------
-function displayItem() {
-  let injectArticle = document.getElementById('cart__items');
+function displayItem(cart) {
   for(let item of cart) {
     fetch(`http://localhost:3000/api/products/${item.id}`)
     .then((data) => data.json())
     .then((product) => {
+
+      injectArticle = document.getElementById('cart__items');
 
       let article = document.createElement('article');
       injectArticle.appendChild(article);
@@ -30,7 +48,7 @@ function displayItem() {
               </div>
               <div class="cart__item__content__settings">
                 <div class="cart__item__content__settings__quantity">
-                  <p>Qté : ${item.quantity}</p>
+                  <p>Qté : </p>
                   <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
                 </div>
                 <div class="cart__item__content__settings__delete">
@@ -40,18 +58,15 @@ function displayItem() {
             </div>
         </article>`;
 
-    items.push(item.id);
     // console.log(items);
     displayTotalQuantity();
     displayTotalPrice();
     changeQuantity(product, cart);
     deleteItem(product);
-    })
+    checkCart();
+    });
   }
 };
-displayItem(cart);
-
-
 //-------------------------------------------------
 // Lire le LS
 //-------------------------------------------------
@@ -69,18 +84,35 @@ function saveCart(cart) {
 // console.log(cart);
 
 //-------------------------------------------------
+// Controle du panier
+//-------------------------------------------------
+function checkCart(){
+  const cart = getCart();
+  if(cart.length == 0){
+    injectArticle = document.getElementById('cart__items');
+
+      let article = document.createElement('article');
+      injectArticle.appendChild(article);
+      article.classList.add('cart__item');
+      article.innerHTML = 'Votre panier est vide.'
+
+    return true;
+  };
+};
+
+//-------------------------------------------------
 // Fonction total quantitée
 //-------------------------------------------------
 function displayTotalQuantity() {
   let product = getCart();
-  const totalQuantity = document.getElementById("totalQuantity");
   let total = 0;
   for (const item of product) {
-    const total = cart.reduce((total, item) => total + item.quantity, 0)
-    totalQuantity.textContent = total;
-  }
+    total += Number(item.quantity);
+  };
+  const totalQuantity = document.querySelector("#totalQuantity");
+  totalQuantity.textContent = total;
   saveCart(product);
-}
+};
 
 //-------------------------------------------------
 // Fonction total prix
@@ -93,11 +125,11 @@ function displayTotalPrice() {
   // console.log(productsPrice);
   let total = 0;
   for(i = 0; i < productsPrice.length; i++) {
-    total += parseInt(productsPrice[i].lastElementChild.textContent) * productsQuantity[i].value;
-  }
+    total += Number(productsPrice[i].lastElementChild.textContent) * productsQuantity[i].value;
+  };
   document.getElementById('totalPrice').textContent = total;
   saveCart(product);
-}
+};
 
 
 //-------------------------------------------------
@@ -105,7 +137,7 @@ function displayTotalPrice() {
 //-------------------------------------------------
 // "Element.closest" https://developer.mozilla.org/fr/docs/Web/API/Element/closest
 
-function changeQuantity(cart) {
+function changeQuantity() {
   let product = getCart();
   let inputQuantity = document.querySelectorAll('.itemQuantity');
 
@@ -118,13 +150,12 @@ function changeQuantity(cart) {
         return item.id == itemId && item.color == itemColor;
       });
       productFind.quantity = Number(e.target.value);
-
-      displayTotalQuantity()
-      displayTotalPrice()
       saveCart(product);
-    })
+      displayTotalQuantity();
+      displayTotalPrice();
+    });
   });
-}
+};
 
 //-------------------------------------------------
 // Supprimer produit
@@ -147,10 +178,11 @@ function deleteItem(product) {
       saveCart(product);
       displayTotalQuantity();
       displayTotalPrice();
-      getCart();
+      checkCart();
     });
   });
-}
+};
+
 //-------------------------------------------------
 // Formulaire
 //-------------------------------------------------
@@ -327,13 +359,13 @@ formular.addEventListener('click', (e) => {
     // console.log("send ok");
     const finalOrder = JSON.parse(localStorage.getItem('cart'));
     let indent = [];
-    console.log(finalOrder);
-    console.log(indent);
+    // console.log(finalOrder);
+    // console.log(indent);
 
     finalOrder.forEach((order) => {
       indent.push(order.id)
     });
-    console.log(indent);
+    // console.log(indent);
 
     const orderData = {
       contact: {
@@ -346,7 +378,7 @@ formular.addEventListener('click', (e) => {
       products: indent
     };
 
-    console.log(orderData);
+    // console.log(orderData);
 
 //-------------------------------------------------
 // Requete Fetch POST
@@ -359,7 +391,7 @@ formular.addEventListener('click', (e) => {
       .then((res) => res.json())
       .then((promise) => {
         let response = promise
-        console.log(response);
+        // console.log(response);
 
       const dataOrder = {
         contact: response.contact,
