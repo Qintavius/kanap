@@ -19,11 +19,11 @@ let seclectedColor;
 let quantity    = document.querySelector('#quantity');
 let selectedQuantity;
 
-// Bouton d'ajout au panier
+// Bouton commander
 let addButton = document.querySelector('#addToCart');
 
 //----------------------------------------------------
-//Récupération des données de l'api
+// Récupération des données de l'api avec ID produit
 //----------------------------------------------------
 fetch(`http://localhost:3000/api/products/${id}`)
 .then(function(request) {
@@ -103,7 +103,7 @@ let productSelected = (data) => {
         //LocalStorage
         //----------------------------------------------------
 
-        // Interrogation du LS
+        // Parcours du LS
         let storageProduct = JSON.parse(localStorage.getItem('cart'));
 
         // Si produit identique dans le LS => incrémantation

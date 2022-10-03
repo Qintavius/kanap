@@ -70,7 +70,7 @@ function displayItem(cart) {
 //-------------------------------------------------
 // Lire le LS
 //-------------------------------------------------
-function getCart(){
+function getCart() {
   let cart = localStorage.getItem('cart');
   return JSON.parse(cart);
 };
@@ -86,7 +86,7 @@ function saveCart(cart) {
 //-------------------------------------------------
 // Controle du panier
 //-------------------------------------------------
-function checkCart(){
+function checkCart() {
   const cart = getCart();
   if(cart.length == 0){
     injectArticle = document.getElementById('cart__items');
@@ -360,7 +360,7 @@ formular.addEventListener('click', (e) => {
     const finalOrder = JSON.parse(localStorage.getItem('cart'));
     let indent = [];
     // console.log(finalOrder);
-    // console.log(indent);
+    console.log(indent);
 
     finalOrder.forEach((order) => {
       indent.push(order.id)
