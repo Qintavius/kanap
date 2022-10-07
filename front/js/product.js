@@ -35,6 +35,9 @@ fetch(`http://localhost:3000/api/products/${id}`)
     // console.table(data);
     productDisplay(data);
     productSelected(data);
+})
+.catch((error) => {
+    console.log('Message d\'erreur: ' + error);
 });
 
 //----------------------------------------------------

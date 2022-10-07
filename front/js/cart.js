@@ -64,6 +64,9 @@ function displayItem(cart) {
     changeQuantity(product, cart);
     deleteItem(product);
     checkCart();
+    })
+    .catch((error) => {
+      console.log('Message d\'erreur: ' + error);
     });
   }
 };
@@ -125,7 +128,7 @@ function displayTotalPrice() {
   // console.log(productsPrice);
   let total = 0;
   for(i = 0; i < productsPrice.length; i++) {
-    total += Number(productsPrice[i].lastElementChild.textContent) * productsQuantity[i].value;
+    total += parseInt(productsPrice[i].lastElementChild.textContent) * productsQuantity[i].value;
   };
   document.getElementById('totalPrice').textContent = total;
   saveCart(product);
@@ -149,7 +152,7 @@ function changeQuantity() {
       let productFind = product.find(function (item) {
         return item.id == itemId && item.color == itemColor;
       });
-      productFind.quantity = Number(e.target.value);
+      productFind.quantity = parseInt(e.target.value);
       saveCart(product);
       displayTotalQuantity();
       displayTotalPrice();
@@ -409,6 +412,9 @@ formular.addEventListener('click', (e) => {
       }
       localStorage.removeItem('cart');
       location.href = 'confirmation.html';
+    })
+    .catch((error) => {
+      console.log('Message d\'erreur: ' + error);
     });
 
   } else {
