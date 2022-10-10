@@ -10,7 +10,7 @@ fetch('http://localhost:3000/api/products')
     .catch((error) => {
         const errorCatch = document.querySelector('.titles h2');
         errorCatch.innerHTML = 'Nous sommes désolés, nous ne pouvons pas afficher nos articles.<br>Essayez d\'actualiser la page.';
-        // console.log('Message d\'erreur: ' + error);
+        console.log('Message d\'erreur: ' + error);
 });
 
 //-------------------------------------------
