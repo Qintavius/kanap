@@ -178,10 +178,11 @@ function deleteItem(product) {
         return item.id != itemId || item.color != itemColor;
       });
       itemDel.remove();
+      window.location.reload();
       saveCart(product);
+      checkCart();
       displayTotalQuantity();
       displayTotalPrice();
-      checkCart();
     });
   });
 };
